@@ -11,6 +11,3 @@ ENCODER_ENABLE = yes		# Enable encoder
 ENCODER_MAP_ENABLE = yes	# Enable encoder mapping
 AUDIO_ENABLE = no           # Audio output
 LTO_ENABLE = yes
-
-# Needed for jiggler
-DEFERRED_EXEC_ENABLE = yes

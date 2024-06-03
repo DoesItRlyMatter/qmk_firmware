@@ -10,9 +10,41 @@ enum custom_keycodes {
 // KEYMAP LAYERS
 enum layers {
     _BL = 0,    // Base Layer
-    _FL,        // Function/Media Layer
+    _FL        // Function/Media Layer
 };
 
+// TAP DANCE
+enum {
+    CT_CAPS = 0
+};
+
+// CAPS TAP DANCE FUNCTION
+void tapdance_caps(tap_dance_state_t *state, void *user_data){
+    // 1, CAPS LOCK
+    if(state->count == 1){
+        register_code(KC_CAPS);
+    }
+    // 2, CAPS WORD
+    else if(state->count == 2){
+        caps_word_on();
+    }
+}
+
+// TAP DANCE ACTIONS
+tap_dance_action_t tap_dance_actions[] = {
+    [CT_CAPS] = ACTION_TAP_DANCE_FN(tapdance_caps),
+};
+
+// COMBOS
+const uint16_t PROGMEM REC_MACRO1_COMBO[] = {KC_LSFT, DM_PLY1, COMBO_END};
+const uint16_t PROGMEM REC_MACRO2_COMBO[] = {KC_LSFT, DM_PLY2, COMBO_END};
+
+combo_t key_combos[] = {
+    COMBO(REC_MACRO1_COMBO, DM_REC1),
+    COMBO(REC_MACRO2_COMBO, DM_REC2)
+};
+
+// JIGGLER STUFF
 __attribute__((weak))
 bool process_record_keymap(uint16_t keycode, keyrecord_t *record) { return true; }
 
@@ -22,10 +54,11 @@ bool process_record_secrets(uint16_t keycode, keyrecord_t *record) { return true
 // BOOL FOR JIGGLER
 bool is_jiggling = false;
 
-/*timers*/
+// TIMERS FOR JIGGLER
 uint32_t idle_timeout = 30000; // (after 30s)
 uint32_t mouse_interval = 10000; // (every 10s)
 
+// JIGGLER
 static uint32_t idle_callback(uint32_t trigger_time, void* cb_arg) {
     // now idle
     if (is_jiggling){
@@ -34,7 +67,6 @@ static uint32_t idle_callback(uint32_t trigger_time, void* cb_arg) {
         return mouse_interval;
     }
     return false;
-
 }
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -55,13 +87,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘ └───┴───┴───┘
      */
     [_BL] = LAYOUT_tkl_ansi(
-        KC_ESC,           KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,     KC_PSCR, KC_SCRL, KC_MUTE,
+        KC_ESC,               KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,     KC_PSCR, KC_SCRL, KC_MUTE,
 
-        KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,    KC_INS,  KC_HOME, KC_PGUP,
-        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,    KC_DEL,  KC_END,  KC_PGDN,
-        KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
-        KC_LSFT,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSFT,             KC_UP,
-        KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, KC_RGUI, MO(_FL), KC_RCTL,    KC_LEFT, KC_DOWN, KC_RGHT
+        KC_GRV,      KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,    KC_INS,  KC_HOME, KC_PGUP,
+        KC_TAB,      KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,    KC_DEL,  KC_END,  KC_PGDN,
+        TD(CT_CAPS), KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
+        KC_LSFT,              KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSFT,             KC_UP,
+        KC_LCTL,     KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, KC_RGUI, MO(_FL), KC_RCTL,    KC_LEFT, KC_DOWN, KC_RGHT
     ),
     /* _FL KEYMAP
      * ┌───┐   ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┐
@@ -82,7 +114,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_FL] = LAYOUT_tkl_ansi(
         KC_NO,            KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,      KC_NO,   KC_NO,   KC_MPLY,
 
-        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,      KC_NO,   KC_NO,   KC_NO,
+        KC_NO,   DM_PLY1, DM_PLY2,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,      KC_NO,   KC_NO,   KC_NO,
         KC_NO,   KC_NO,   KC_NO,   KC_NO,   QK_BOOT, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,      KC_NO,   RGB_TOG, RGB_RESET,
         KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,            KC_NO,
         KC_LSFT,          KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,            KC_RSFT,               RGB_VAI,

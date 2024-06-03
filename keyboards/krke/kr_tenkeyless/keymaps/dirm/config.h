@@ -4,3 +4,6 @@
 #define RGBLIGHT_LAYERS
 #define RGBLIGHT_CONFIG
 #define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF
+
+// Tapping term in milliseconds
+#define TAPPING_TERM 175
