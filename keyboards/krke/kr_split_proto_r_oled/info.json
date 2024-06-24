@@ -1,0 +1,32 @@
+{
+    "manufacturer": "KRKE",
+    "keyboard_name": "krke/kr_split_proto_r_oled",
+    "maintainer": "DoesItRlyMatter",
+    "bootloader": "atmel-dfu",
+    "diode_direction": "COL2ROW",
+    "matrix_pins": {
+        "cols": ["B0", "B1"],
+        "rows": ["B3", "B2", "F0"]
+    },
+    "processor": "atmega32u4",
+    "url": "",
+    "usb": {
+        "device_version": "0.0.1",
+        "pid": "0x0000",
+        "vid": "0xFEED"
+    },
+    "layouts": {
+        "LAYOUT_normal": {
+            "layout": [
+                {"matrix": [0, 0], "x": 0, "y": 0},
+                {"matrix": [0, 1], "x": 1, "y": 0},
+
+                {"matrix": [1, 0], "x": 0, "y": 1},
+                {"matrix": [1, 1], "x": 1, "y": 1},
+
+                {"matrix": [2, 0], "x": 0, "y": 2},
+                {"matrix": [2, 1], "x": 1, "y": 2}
+            ]
+        }
+    }
+}
