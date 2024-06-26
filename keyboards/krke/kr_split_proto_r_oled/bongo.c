@@ -481,6 +481,29 @@ static void render_bongo(void){
     // Order to show frames.
     uint16_t frame_order[70] = {3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 0, 3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 6, 5, 5, 1, 3, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3};
 
+    // Change frame duration based on wpm.
+    if (get_current_wpm() > 150){
+        frame_duration = 15;
+    }
+    else if(get_current_wpm() > 125){
+        frame_duration = 30;
+    }
+    else if(get_current_wpm() > 100){
+        frame_duration = 45;
+    }
+    else if(get_current_wpm() > 75){
+        frame_duration = 60;
+    }
+    else if(get_current_wpm() > 50){
+        frame_duration = 75;
+    }
+    else if(get_current_wpm() > 25){
+        frame_duration = 90;
+    }
+    else if(get_current_wpm() > 0){
+        frame_duration = 105;
+    }
+
     // Frame change
     if (timer_elapsed(bongo_animation_timer) > frame_duration){
         // Update timer
@@ -489,5 +512,12 @@ static void render_bongo(void){
         bongo_visible_frame = (bongo_visible_frame + 1) % (sizeof(frame_order) / sizeof(frame_order[0]));
     }
     // Write frame
-    oled_write_raw_P(bongo_frames[frame_order[bongo_visible_frame]], bongo_frames_size[frame_order[bongo_visible_frame]]);
+    // Neutral frame if WPM is 0.
+    if (get_current_wpm() == 0){
+        // Frame 0 is neutral.
+        oled_write_raw_P(bongo_frames[frame_order[0]], bongo_frames_size[frame_order[0]]);
+    }
+    else{
+        oled_write_raw_P(bongo_frames[frame_order[bongo_visible_frame]], bongo_frames_size[frame_order[bongo_visible_frame]]);
+    }
 }
